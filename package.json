@@ -1,0 +1,20 @@
+{
+  "manver" : "1",
+  "project" : "multitask",
+  "description" : "multitasking helper functions",
+  "version" : "0.0.1",
+  "license" : "MIT",
+  "author" : "kobbled",
+  "source" : [
+    "src/multitask.kl"
+  ],
+  "includes" : [
+    "include"
+  ],
+  "depends" : [
+    "errors",
+    "ktransw-macros"
+  ],
+  "external_paths" : [
+  ]
+}
