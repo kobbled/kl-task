@@ -1,0 +1,10 @@
+%ifndef multitasking_t
+%define multitasking_t
+
+-- timeout set for join method
+-- will try joining task for 100*20 = 2 sec
+%define  MAX_CHECK_DELAY 100
+%define  MAX_STATUS_CHECKS 20
+
+
+%endif --multitasking_t

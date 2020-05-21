@@ -5,9 +5,85 @@ PROGRAM multitask
 %NOPAUSE = COMMAND + TPENABLE + ERROR
 
 %include errors.klt
+%include multitask.klt
 
 %include errors.klh
 %include multitask.klh
+
+
+ROUTINE task__thread
+  VAR
+    status : INTEGER
+  BEGIN
+    RUN_TASK(task_name, 0, TRUE, FALSE, 1, status)
+
+    IF status <> 0 THEN
+      karelError('Problem staring task: ' + task_name, ER_WARN)
+      RETURN(FALSE)
+    ENDIF
+
+    RETURN(TRUE)
+  
+  END task__thread
+
+
+ROUTINE task__thread_motion
+  VAR
+    status : INTEGER
+  BEGIN
+    --group mask decimal corresponds with (gp1,gp2,gp3,gp4)
+        --1000 = 1 : 0100 = 2  : 0010 = 4  : 0001 = 8
+        --           1100 = 3  : 1010 = 5  : 1001 = 9
+        --           1110 = 7  : 1110 = 7  : 1011 = 13
+        --                     : 1011 = 13 :
+    RUN_TASK(task_name, 0, TRUE, TRUE, grp_mask, status)
+
+    IF status <> 0 THEN
+      karelError('Problem staring task: ' + task_name, ER_WARN)
+      RETURN(FALSE)
+    ENDIF
+
+    RETURN(TRUE)
+  
+  END task__thread_motion
+
+ROUTINE task__join
+  VAR
+    status, n : INTEGER
+    task_no : INTEGER
+    attr_out : INTEGER
+    dummy : STRING[2]
+  BEGIN
+    --initialize status check counter
+    n = 0
+    --wait for task to pause or abort
+    CHECK_JOIN::
+
+    GET_TSK_INFO(task_name, task_no, TSK_STATUS, attr_out, dummy, status)
+    IF status <> 0 THEN
+      karelError('problem in join getting status of ' + task_name + '', ER_ABORT)
+      RETURN(FALSE)
+    ENDIF
+
+    IF attr_out = PG_RUNNING THEN
+      DELAY MAX_CHECK_DELAY
+      n = n + 1
+      IF (n < MAX_STATUS_CHECKS) THEN GOTO CHECK_JOIN; ENDIF
+      karelError('task ' + task_name + ' could not complete in the within' + & 
+                 'the maxium timeout set for join', ER_ABORT)
+    ENDIF
+
+    -- once task is completed pause task
+
+    PAUSE_TASK(task_name, TRUE, TRUE, status)
+    IF status <> 0 THEN
+      karelError('thread barrier for ' + task_name + ' was not successful', ER_WARN)
+      RETURN(FALSE)
+    ENDIF
+
+    RETURN(TRUE)
+  END task__join
+
 
 ROUTINE task__is_task_done
   VAR 

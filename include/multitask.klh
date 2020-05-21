@@ -7,8 +7,14 @@
 %define prog_name_alias task
 
 -- namespaced members in format <prog_name_alias>__<func_name>
+declare(prog_name,thread,prog_name_alias,thread)
+declare(prog_name,thread_motion,prog_name_alias,thdmtn)
+declare(prog_name,join,prog_name_alias,join)
 declare(prog_name,is_task_done,prog_name_alias,isdone)
 
-ROUTINE task__is_task_done(task_name:STRING) : BOOLEAN FROM multitask
+ROUTINE task__thread(task_name: STRING) : BOOLEAN FROM multitask
+ROUTINE task__thread_motion(task_name: STRING; grp_mask: INTEGER) : BOOLEAN FROM multitask
+ROUTINE task__join(task_name: STRING) : BOOLEAN FROM multitask
+ROUTINE task__is_task_done(task_name: STRING) : BOOLEAN FROM multitask
 
 %endif --source_h
