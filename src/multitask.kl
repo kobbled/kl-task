@@ -15,7 +15,7 @@ ROUTINE task__thread
   VAR
     status : INTEGER
   BEGIN
-    RUN_TASK(task_name, 0, TRUE, FALSE, 1, status)
+    RUN_TASK(task_name, 0, TRUE, FALSE, 0, status)
 
     IF status <> 0 THEN
       karelError('Problem staring task: ' + task_name, ER_WARN)
