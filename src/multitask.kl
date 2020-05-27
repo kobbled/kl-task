@@ -92,18 +92,10 @@ ROUTINE task__is_task_done
     attr_out : INTEGER
     dummy : STRING[2]
   BEGIN
-    GET_TSK_INFO(task_name, task_no, TSK_PARENT, attr_out, dummy, status)
-
-    IF status <> 0 THEN
-      karelError('Problem getting info for ' + task_name, ER_WARN)
-      RETURN(FALSE)
-    ENDIF
-
-    IF (attr_out > 0) THEN
-      GET_TSK_INFO(task_name, task_no, TSK_STATUS, attr_out, dummy, status)
-      IF (attr_out = PG_ABORTED) THEN
-        RETURN(TRUE)
-      ENDIF
+  
+    GET_TSK_INFO(task_name, task_no, TSK_STATUS, attr_out, dummy, status)
+    IF (attr_out = PG_ABORTED) THEN
+      RETURN(TRUE)
     ENDIF
 
     RETURN(FALSE)
