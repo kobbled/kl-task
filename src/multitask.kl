@@ -47,7 +47,7 @@ ROUTINE task__thread_motion
   
   END task__thread_motion
 
-ROUTINE task__join
+ROUTINE task__wait
   VAR
     status, n : INTEGER
     task_no : INTEGER
@@ -61,7 +61,7 @@ ROUTINE task__join
 
     GET_TSK_INFO(task_name, task_no, TSK_STATUS, attr_out, dummy, status)
     IF status <> 0 THEN
-      karelError('problem in join getting status of ' + task_name + '', ER_ABORT)
+      karelError('problem in task wait getting status of ' + task_name + '', ER_ABORT)
       RETURN(FALSE)
     ENDIF
 
@@ -70,7 +70,7 @@ ROUTINE task__join
       n = n + 1
       IF (n < MAX_STATUS_CHECKS) THEN GOTO CHECK_JOIN; ENDIF
       karelError('task ' + task_name + ' could not complete in the within' + & 
-                 'the maxium timeout set for join', ER_ABORT)
+                 'the maxium timeout set for wait', ER_ABORT)
     ENDIF
 
     -- once task is completed pause task
@@ -82,7 +82,7 @@ ROUTINE task__join
     ENDIF
 
     RETURN(TRUE)
-  END task__join
+  END task__wait
 
 
 ROUTINE task__is_task_done
@@ -94,13 +94,39 @@ ROUTINE task__is_task_done
   BEGIN
   
     GET_TSK_INFO(task_name, task_no, TSK_STATUS, attr_out, dummy, status)
-    IF (attr_out = PG_ABORTED) THEN
+    IF (attr_out = PG_ABORTED) OR (attr_out = PG_ABORTING) THEN
       RETURN(TRUE)
     ENDIF
 
     RETURN(FALSE)
 
   END task__is_task_done
+
+ROUTINE task__abort
+  VAR
+    status : INTEGER
+  BEGIN
+    ABORT_TASK(task_name, TRUE, FALSE, status)
+    IF STATUS <> 0 THEN
+      karelError(task_name + ' was not aborted successfully', ER_WARN)
+      RETURN(FALSE)
+    ELSE
+      RETURN(TRUE)
+    ENDIF
+  END task__abort
+
+ROUTINE task__abort_motion
+  VAR
+    status : INTEGER
+  BEGIN
+    ABORT_TASK(task_name, TRUE, TRUE, status)
+    IF STATUS <> 0 THEN
+      karelError(task_name + ' was not aborted successfully', ER_WARN)
+      RETURN(FALSE)
+    ELSE
+      RETURN(TRUE)
+    ENDIF
+  END task__abort_motion
 
 BEGIN
 END multitask
