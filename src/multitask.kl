@@ -18,7 +18,7 @@ ROUTINE task__thread
     RUN_TASK(task_name, 0, TRUE, FALSE, 0, status)
 
     IF status <> 0 THEN
-      karelError('Problem staring task: ' + task_name, ER_WARN)
+      karelError(status, 'Problem staring task: ' + task_name, ER_WARN)
       RETURN(FALSE)
     ENDIF
 
@@ -39,7 +39,7 @@ ROUTINE task__thread_motion
     RUN_TASK(task_name, 0, TRUE, TRUE, grp_mask, status)
 
     IF status <> 0 THEN
-      karelError('Problem staring task: ' + task_name, ER_WARN)
+      karelError(status, 'Problem staring task: ' + task_name, ER_WARN)
       RETURN(FALSE)
     ENDIF
 
@@ -61,7 +61,7 @@ ROUTINE task__wait
 
     GET_TSK_INFO(task_name, task_no, TSK_STATUS, attr_out, dummy, status)
     IF status <> 0 THEN
-      karelError('problem in task wait getting status of ' + task_name + '', ER_ABORT)
+      karelError(status,'problem in task wait getting status of ' + task_name + '', ER_ABORT)
       RETURN(FALSE)
     ENDIF
 
@@ -69,7 +69,7 @@ ROUTINE task__wait
       DELAY MAX_CHECK_DELAY
       n = n + 1
       IF (n < MAX_STATUS_CHECKS) THEN GOTO CHECK_JOIN; ENDIF
-      karelError('task ' + task_name + ' could not complete in the within' + & 
+      karelError(PROGRAM_TIMEDOUT, 'task ' + task_name + ' could not complete in the within' + & 
                  'the maxium timeout set for wait', ER_ABORT)
     ENDIF
 
@@ -77,7 +77,7 @@ ROUTINE task__wait
 
     PAUSE_TASK(task_name, TRUE, TRUE, status)
     IF status <> 0 THEN
-      karelError('thread barrier for ' + task_name + ' was not successful', ER_WARN)
+      karelError(status,'thread barrier for ' + task_name + ' was not successful', ER_WARN)
       RETURN(FALSE)
     ENDIF
 
@@ -107,8 +107,8 @@ ROUTINE task__abort
     status : INTEGER
   BEGIN
     ABORT_TASK(task_name, TRUE, FALSE, status)
-    IF STATUS <> 0 THEN
-      karelError(task_name + ' was not aborted successfully', ER_WARN)
+    IF status <> 0 THEN
+      karelError(status, task_name + ' was not aborted successfully', ER_WARN)
       RETURN(FALSE)
     ELSE
       RETURN(TRUE)
@@ -120,8 +120,8 @@ ROUTINE task__abort_motion
     status : INTEGER
   BEGIN
     ABORT_TASK(task_name, TRUE, TRUE, status)
-    IF STATUS <> 0 THEN
-      karelError(task_name + ' was not aborted successfully', ER_WARN)
+    IF status <> 0 THEN
+      karelError(status, task_name + ' was not aborted successfully', ER_WARN)
       RETURN(FALSE)
     ELSE
       RETURN(TRUE)
