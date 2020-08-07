@@ -15,7 +15,7 @@ ROUTINE task__thread
   VAR
     status : INTEGER
   BEGIN
-    RUN_TASK(task_name, 0, TRUE, FALSE, 0, status)
+    RUN_TASK(task_name, 0, FALSE, FALSE, 0, status)
 
     IF status <> 0 THEN
       karelError(status, 'Problem staring task: ' + task_name, ER_WARN)
@@ -36,7 +36,7 @@ ROUTINE task__thread_motion
         --           1100 = 3  : 1010 = 5  : 1001 = 9
         --           1110 = 7  : 1110 = 7  : 1011 = 13
         --                     : 1011 = 13 :
-    RUN_TASK(task_name, 0, TRUE, TRUE, grp_mask, status)
+    RUN_TASK(task_name, 0, FALSE, TRUE, grp_mask, status)
 
     IF status <> 0 THEN
       karelError(status, 'Problem staring task: ' + task_name, ER_WARN)
