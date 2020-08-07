@@ -11,6 +11,7 @@ declare(prog_name,thread,prog_name_alias,thread)
 declare(prog_name,thread_motion,prog_name_alias,thdmtn)
 declare(prog_name,wait,prog_name_alias,wait)
 declare(prog_name,is_task_done,prog_name_alias,isdone)
+declare(prog_name,is_task_running,prog_name_alias,isrun)
 declare(prog_name,abort,prog_name_alias,abort)
 declare(prog_name,abort_motion,prog_name_alias,abrtmtn)
 
@@ -18,6 +19,7 @@ ROUTINE task__thread(task_name: STRING) : BOOLEAN FROM multitask
 ROUTINE task__thread_motion(task_name: STRING; grp_mask: INTEGER) : BOOLEAN FROM multitask
 ROUTINE task__wait(task_name: STRING) : BOOLEAN FROM multitask
 ROUTINE task__is_task_done(task_name: STRING) : BOOLEAN FROM multitask
+ROUTINE task__is_task_running(task_name: STRING) : BOOLEAN FROM multitask
 ROUTINE task__abort(task_name: STRING) : BOOLEAN FROM multitask
 ROUTINE task__abort_motion(task_name: STRING) : BOOLEAN FROM multitask
 

@@ -102,6 +102,23 @@ ROUTINE task__is_task_done
 
   END task__is_task_done
 
+ROUTINE task__is_task_running
+  VAR 
+    status : INTEGER
+    task_no : INTEGER
+    attr_out : INTEGER
+    dummy : STRING[2]
+  BEGIN
+  
+    GET_TSK_INFO(task_name, task_no, TSK_STATUS, attr_out, dummy, status)
+    IF (attr_out = PG_RUNNING) THEN
+      RETURN(TRUE)
+    ENDIF
+
+    RETURN(FALSE)
+
+  END task__is_task_running
+
 ROUTINE task__abort
   VAR
     status : INTEGER
