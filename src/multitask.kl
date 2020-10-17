@@ -119,6 +119,18 @@ ROUTINE task__is_task_running
 
   END task__is_task_running
 
+ROUTINE task__is_parent_of
+  VAR 
+    status : INTEGER
+    task_no : INTEGER
+    attr_out : INTEGER
+    dummy : STRING[2]
+  BEGIN
+    GET_TSK_INFO(task_name, task_no, TSK_PARENT, attr_out, dummy, status)
+    IF STATUS <> 0 THEN RETURN(FALSE) ; ENDIF
+    IF (attr_out > 0) THEN RETURN(TRUE) ; ELSE RETURN(FALSE) ; ENDIF
+  END task__is_parent_of
+
 ROUTINE task__abort
   VAR
     status : INTEGER

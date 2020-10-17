@@ -16,6 +16,8 @@ declare_function(prog_name,is_task_done,prog_name_alias,isdone)
 ROUTINE task__is_task_done(task_name: STRING) : BOOLEAN FROM multitask
 declare_function(prog_name,is_task_running,prog_name_alias,isrun)
 ROUTINE task__is_task_running(task_name: STRING) : BOOLEAN FROM multitask
+declare_function(prog_name,is_parent_of,prog_name_alias,ispar)
+ROUTINE task__is_parent_of(task_name: STRING) : BOOLEAN FROM multitask
 declare_function(prog_name,abort,prog_name_alias,abort)
 ROUTINE task__abort(task_name: STRING) : BOOLEAN FROM multitask
 declare_function(prog_name,abort_motion,prog_name_alias,abrtmtn)
